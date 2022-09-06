@@ -1,0 +1,16 @@
+kevitos-automato
+S: q0,q1,q2,q3,q4
+A: P,A,C,V,F
+i: q0
+f: q0
+
+(q0,P,q1)
+(q1,F,q0)
+(q1,A,q2)
+(q2,F,q0)
+(q2,C,q3)
+(q3,F,q0)
+(q3,C,q3)
+(q3,V,q4)
+(q4,F,q0)
+
