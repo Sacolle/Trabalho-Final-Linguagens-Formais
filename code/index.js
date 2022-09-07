@@ -23,9 +23,10 @@ class Automato {
 		this.stateTable = parseStates(estados, rawStates);
 	}
 	step(char){
-		console.log(char)
+		if(char == 'ε'){
+			return true
+		}
 		if(!this.tokens.has(char)){
-			console.log("token não existe")
 			return false;
 		}
 		let moves = this.stateTable.get(this.curr);
@@ -36,24 +37,30 @@ class Automato {
 			return false
 		}
 	}
+	reset(){
+		this.curr = this.inicial
+	}
 	final(){
 		return this.finais.has(this.curr)
 	}
 }
 
-let auto = parseAutomato(automatoRaw)
-let early = false
-for(ch of [...words]){
-	if(!auto.step(ch)){
-		early = true
-		break;
-	}
-}
 
-if (auto.final() && !early){
-	console.log("aceita")
-}else{
-	console.log("rejeita")
+let auto = parseAutomato(automatoRaw)
+for(word of words.split('\n')){
+	auto.reset()
+	let undef = false
+	for(ch of [...(word.trim())]){
+		if(!auto.step(ch)){
+			undef = true
+			break;
+		}
+	}
+	if (auto.final() && !undef){
+		console.log(`aceita: ${word}`)
+	}else{
+		console.log(`rejeita: ${word}`)
+	}
 }
 
 
