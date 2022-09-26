@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Interface do Autômato</title>
+	<script src="index-browser.js" defer></script>
+	<style>
+		.wrap{
+			display: flex;
+		}
+		.wrap > div{
+			display: grid;
+			grid-template-columns: 1;
+			padding-left: 10px;
+		}
+		textarea{
+			width: 400px;
+			height: 400px;
+			overflow: scroll;
+			margin: 5px 25px 5px 0px;
+		}
+		button{
+			width: fit-content;
+			translate: 200%;
+		}
+		#statusAuto{
+			white-space: pre;
+			font-size: large;
+			font-weight: bold;
+		}
+		.aceitas li{
+			color: green;
+			font-weight: bold;
+		}
+		.rejeitas li{
+			color: red;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<h1>Interface do Autômato</h1>
+	<p>Explicação</p>
+	<ul>
+		<li>
+			passo
+		</li>
+	</ul>
+	<div class="wrap">
+		<div>
+			<label for="auto">Autômato:</label>
+			<textarea id="autoInput" name="auto"></textarea>
+			<button onclick="parseAutomato()">Processar</button>
+		</div>
+		<div>
+			<label for="pent">Palavras de Entrada:</label>
+			<textarea id="palavrasInput" name="pent"></textarea>
+			<button onclick="testePalavras()">Reconhecer</button>
+		</div>
+	</div>
+	<span>Estatus do Autômato:</span><span id="statusAuto" style="color: red;">  Não inicializado</span>
+	<h3>Aceitas:</h3>
+	<ul class="aceitas"></ul>
+	<h3>Rejeitas:</h3>
+	<ul class="rejeitas"></ul>
+	<button onclick="clearPalavras()">Clear</button>
+</body>
+</html>
