@@ -90,6 +90,16 @@ class Automato {
 			}
 		}
 	}
+	toString(){
+		let tabela = ''
+		this.stateTable.forEach((val,q0) => this.stateTable.get(q0).forEach((q1,char) => {tabela = tabela + '(' + q0 + ',' + char + ',' + q1 + ')\n'}))
+		return `${this.name}
+S: ${new Array(...this.estados).join(',')}
+A: ${new Array(...this.tokens).join(',')}
+i: ${this.inicial}
+f: ${new Array(...this.finais).join(',')}
+${tabela}`
+	}
 }
 
 class Teste {
@@ -163,6 +173,9 @@ function parseAutomato(){
 		window.automato = minimize(new Automato(name,estados,tokens,inicial,finais,rawStates))
 		status.innerText = "  Inicializado"
 		status.style = 'color: green'
+
+		document.getElementById("autoInput").value = window.automato
+
 	}catch(e){
 		window.alert(e)
 		window.automato = undefined
