@@ -54,6 +54,8 @@ class Automato {
 		if(this.finais.has(estado2)){
 			this.finais.delete(estado2)
 		}
+
+		this.parseTransicoes(estado2, estado1)
 	}
 	parseInutil(estado){
 		this.estados.delete(estado)
@@ -70,7 +72,36 @@ class Automato {
 			return true
 		}
 
+		this.parseTransicoes(estado, null)
+
 		return false
+	}
+	parseInatingivel(estado){
+		this.estados.delete(estado)
+		this.stateTable.delete(estado)
+
+		if(this.finais.has(estado)){
+			this.finais.delete(estado)
+		}
+
+		this.parseTransicoes(estado, null)
+	}
+	parseTransicoes(estado1, estado2){
+		let moves
+
+		for(let q of this.estados){
+			moves = this.stateTable.get(q)
+			for(let token of this.tokens){
+				if(moves.has(token) && moves.get(token) == estado1){
+					if(estado2 == null){
+						moves.remove(token)
+					}
+					else{
+						moves.set(token, estado2)
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -92,14 +123,13 @@ for(word of words.split('\n')){
 			break;
 		}
 	}
+	//console.log(auto)
 	if (auto.final() && !undef){
 		console.log(`aceita: ${word}`)
 	}else{
 		console.log(`rejeita: ${word}`)
 	}
 }
-
-
 
 
 function parseAutomato(input){
@@ -157,7 +187,16 @@ function parseStates(estados, rawStates){
 
 
 function minimize(auto){
-	let vazia, estado, estado1, estado2, testados = []
+	let vazia, estado, estado1, estado2, inat, testados = []
+
+	for(estado of auto.estados){
+		inat = inatingivel(auto, [], estado, auto.inicial)
+
+		if(inat){
+			auto.parseInatingivel(estado)
+		}
+	}
+
 	for(estado1 of auto.estados){
 		testados.push(estado1)
 		for(estado2 of auto.estados){
@@ -238,6 +277,30 @@ function inutil(auto, testados, estado){
 
 	for(token of auto.tokens){
 		if(moves.has(token) && !inutil(auto, testados, moves.get(token))){
+			return false
+		}
+	}
+
+	return true
+}
+
+
+function inatingivel(auto, testados, estado, pos){
+	let moves, token
+
+	if(pos == estado){
+		return false
+	}
+
+	if(testados.includes(pos)){
+		return true
+	}
+
+	testados.push(pos)
+	moves = auto.stateTable.get(pos)
+
+	for(token of auto.tokens){
+		if(moves.has(token) && !inatingivel(auto, testados, estado, moves.get(token))){
 			return false
 		}
 	}
