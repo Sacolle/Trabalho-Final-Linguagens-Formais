@@ -43,6 +43,42 @@ class Automato {
 	final(){
 		return this.finais.has(this.curr)
 	}
+	parseIgualdade(estado1,estado2){
+		this.estados.delete(estado2)
+		this.stateTable.delete(estado2)
+
+		if(this.inicial == estado2){
+			this.inicial = estado1
+		}
+
+		if(this.finais.has(estado2)){
+			this.finais.delete(estado2)
+		}
+	}
+	parseInutil(estado){
+		this.estados.delete(estado)
+		this.stateTable.delete(estado)
+
+		if(this.inicial == estado){
+			this.inicial = null
+			this.estados.clear()
+			this.finais.clear()
+
+			this.curr = null
+			this.stateTable.clear()
+
+			return true
+		}
+
+		return false
+	}
+}
+
+class Teste {
+	constructor(estado1, estado2){
+		this.estado1 = estado1
+		this.estado2 = estado2
+	}
 }
 
 
@@ -65,6 +101,7 @@ for(word of words.split('\n')){
 
 
 
+
 function parseAutomato(input){
 	let lines = input.split('\n')
 	
@@ -75,6 +112,7 @@ function parseAutomato(input){
 		.split(',').map(val=>val.trim())
 	
 	let tokens = lines[2]
+
 		.split(':')[1].trim()
 		.split(',').map(val=>val.trim())
 	
@@ -94,17 +132,19 @@ function parseAutomato(input){
 	console.log(inicial)
 	console.log(finais)
 	console.log(rawStates)
-*/
-	return new Automato(name,estados,tokens,inicial,finais,rawStates)
+	*/
+
+	return minimize(new Automato(name,estados,tokens,inicial,finais,rawStates))
+	//return new Automato(name,estados,tokens,inicial,finais,rawStates)
 }
 
 
 function parseStates(estados, rawStates){
-	let table = new Map(estados.map(val=>[val,new Map]));
+	let table = new Map(estados.map(val => [val,new Map]));
 	
 	rawStates.map((state)=>{
 		return state.trim()
-			.substr(1,state.length - 2)
+			.substr(1,state.length - 3)
 			.split(',')
 			.map(elem => elem.trim())
 	}).forEach((trio)=>{
@@ -115,3 +155,92 @@ function parseStates(estados, rawStates){
 	return table
 }
 
+
+function minimize(auto){
+	let vazia, estado, estado1, estado2, testados = []
+	for(estado1 of auto.estados){
+		testados.push(estado1)
+		for(estado2 of auto.estados){
+			if(!testados.includes(estado2)){
+				if(iguais(auto, [], estado1, estado2)){
+					auto.parseIgualdade(estado1,estado2)
+					testados.push(estado2)
+				}
+			}
+		}
+	}
+	
+	for(estado of auto.estados){
+		if(inutil(auto, [], estado)){
+			vazia = auto.parseInutil(estado)
+		}
+
+		if(vazia){
+			break
+		}
+	}
+
+	return auto
+}
+
+
+function iguais(auto, testados, estado1, estado2){
+	let teste = new Teste(estado1, estado2), invTeste = new Teste(estado2, estado1)
+	let finEst1 = auto.finais.has(estado1), finEst2 = auto.finais.has(estado2)
+	let moves1, moves2, token
+
+	if((finEst1 && !finEst2) || (finEst2 && !finEst1)){
+		return false
+	}
+
+	if(testados.includes(teste) || testados.includes(invTeste)){
+		return true
+	}
+
+	testados.push(teste)
+	moves1 = auto.stateTable.get(estado1)
+	moves2 = auto.stateTable.get(estado2)
+
+	for(token of auto.tokens){
+		if(moves1.has(token)){
+			if(!moves2.has(token)){
+				return false
+			}
+
+			if(moves1.get(token) != moves2.get(token)){
+				if(!iguais(auto, testados, moves1.get(token), moves2.get(token))){
+					return false
+				}
+			}
+		}
+		else if(moves2.has(token)){
+			return false
+		}
+	}
+
+	return true
+}
+
+
+function inutil(auto, testados, estado){
+	let moves, token
+
+	if(auto.finais.has(estado)){
+		return false
+	}
+
+	if(testados.includes(estado)){
+		return true
+	}
+
+	testados.push(estado)
+	moves = auto.stateTable.get(estado)
+
+	for(token of auto.tokens){
+		if(moves.has(token) && !inutil(auto, testados, moves.get(token))){
+			return false
+		}
+	}
+
+	return true
+}

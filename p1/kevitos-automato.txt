@@ -1,9 +1,8 @@
 kevitos-automato
-S: q0,q1,q2,q3,q4
+S: q0,q1,q2,q3,q4,q5
 A: P,A,C,V,F
 i: q0
 f: q0
-
 (q0,P,q1)
 (q1,F,q0)
 (q1,A,q2)
