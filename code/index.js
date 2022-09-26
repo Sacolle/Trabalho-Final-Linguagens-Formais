@@ -105,6 +105,7 @@ class Automato {
 	}
 }
 
+
 class Teste {
 	constructor(estado1, estado2){
 		this.estado1 = estado1
@@ -114,8 +115,8 @@ class Teste {
 
 
 let auto = parseAutomato(automatoRaw)
-console.log(auto)
-for(word of words.split('\n')){
+//console.log(auto)
+for(let word of words.split('\n')){
 	auto.reset()
 	let undef = false
 	for(ch of [...(word.trim())]){
@@ -189,9 +190,9 @@ function parseStates(estados, tokens, rawStates){
 
 
 function minimize(auto){
-	let vazia, estado, estado1, estado2, inat, testados = []
+	let vazia, inat, testados = []
 
-	for(estado of auto.estados){
+	for(let estado of auto.estados){
 		inat = inatingivel(auto, [], estado, auto.inicial)
 
 		if(inat){
@@ -199,9 +200,9 @@ function minimize(auto){
 		}
 	}
 
-	for(estado1 of auto.estados){
+	for(let estado1 of auto.estados){
 		testados.push(estado1)
-		for(estado2 of auto.estados){
+		for(let estado2 of auto.estados){
 			if(!testados.includes(estado2)){
 				if(iguais(auto, [], estado1, estado2)){
 					auto.parseIgualdade(estado1,estado2)
@@ -211,7 +212,7 @@ function minimize(auto){
 		}
 	}
 	
-	for(estado of auto.estados){
+	for(let estado of auto.estados){
 		if(inutil(auto, [], estado)){
 			vazia = auto.parseInutil(estado)
 		}
@@ -228,7 +229,7 @@ function minimize(auto){
 function iguais(auto, testados, estado1, estado2){
 	let teste = new Teste(estado1, estado2), invTeste = new Teste(estado2, estado1)
 	let finEst1 = auto.finais.has(estado1), finEst2 = auto.finais.has(estado2)
-	let moves1, moves2, token
+	let moves1, moves2
 
 	if((finEst1 && !finEst2) || (finEst2 && !finEst1)){
 		return false
@@ -242,7 +243,7 @@ function iguais(auto, testados, estado1, estado2){
 	moves1 = auto.stateTable.get(estado1)
 	moves2 = auto.stateTable.get(estado2)
 
-	for(token of auto.tokens){
+	for(let token of auto.tokens){
 		if(moves1.has(token)){
 			if(!moves2.has(token)){
 				return false
@@ -264,8 +265,6 @@ function iguais(auto, testados, estado1, estado2){
 
 
 function inutil(auto, testados, estado){
-	let moves, token
-
 	if(auto.finais.has(estado)){
 		return false
 	}
@@ -275,9 +274,9 @@ function inutil(auto, testados, estado){
 	}
 
 	testados.push(estado)
-	moves = auto.stateTable.get(estado)
+	let moves = auto.stateTable.get(estado)
 
-	for(token of auto.tokens){
+	for(let token of auto.tokens){
 		if(moves.has(token) && !inutil(auto, testados, moves.get(token))){
 			return false
 		}
@@ -288,8 +287,6 @@ function inutil(auto, testados, estado){
 
 
 function inatingivel(auto, testados, estado, pos){
-	let moves, token
-
 	if(pos == estado){
 		return false
 	}
@@ -299,9 +296,9 @@ function inatingivel(auto, testados, estado, pos){
 	}
 
 	testados.push(pos)
-	moves = auto.stateTable.get(pos)
+	let moves = auto.stateTable.get(pos)
 
-	for(token of auto.tokens){
+	for(let token of auto.tokens){
 		if(moves.has(token) && !inatingivel(auto, testados, estado, moves.get(token))){
 			return false
 		}
