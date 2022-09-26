@@ -20,7 +20,7 @@ class Automato {
 		this.finais = new Set(finais)
 
 		this.curr = inicial
-		this.stateTable = parseStates(estados, rawStates);
+		this.stateTable = parseStates(estados, tokens, rawStates);
 	}
 	step(char){
 		if(char == 'ε'){
@@ -114,6 +114,7 @@ class Teste {
 
 
 let auto = parseAutomato(automatoRaw)
+console.log(auto)
 for(word of words.split('\n')){
 	auto.reset()
 	let undef = false
@@ -123,7 +124,6 @@ for(word of words.split('\n')){
 			break;
 		}
 	}
-	//console.log(auto)
 	if (auto.final() && !undef){
 		console.log(`aceita: ${word}`)
 	}else{
@@ -169,7 +169,7 @@ function parseAutomato(input){
 }
 
 
-function parseStates(estados, rawStates){
+function parseStates(estados, tokens, rawStates){
 	let table = new Map(estados.map(val => [val,new Map]));
 	
 	rawStates.map((state)=>{
@@ -179,7 +179,9 @@ function parseStates(estados, rawStates){
 			.map(elem => elem.trim())
 	}).forEach((trio)=>{
 		let [de,char,para] = [...trio] 
-		table.get(de).set(char,para)
+		if(estados.includes(de) && tokens.includes(char) && estados.includes(para)){
+			table.get(de).set(char,para)
+		}
 	})
 	//console.log(table)
 	return table
