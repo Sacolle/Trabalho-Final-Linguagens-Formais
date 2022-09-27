@@ -1,12 +1,11 @@
 const fs = require('fs')
 
-const fileAutomato = process.argv[2] || "../p1/kevitos-automato.txt"
-const fileWords = process.argv[3] || "../test.txt"
-/*
+const fileAutomato = process.argv[2]
+const fileWords = process.argv[3]
 if (fileAutomato == undefined || fileWords == undefined){
 	console.log("Faltando o nome do Arquivo")
 	return
-}*/
+}
 
 const automatoRaw = fs.readFileSync(fileAutomato ,'utf-8')
 const words = fs.readFileSync(fileWords ,'utf-8')
@@ -115,7 +114,6 @@ class Teste {
 
 
 let auto = parseAutomato(automatoRaw)
-//console.log(auto)
 for(let word of words.split('\n')){
 	auto.reset()
 	let undef = false
