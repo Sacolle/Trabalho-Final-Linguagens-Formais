@@ -49,11 +49,11 @@ class Automato {
 		this.stateTable.delete(estado)
 
 		if(this.inicial == estado){
-			this.inicial = null
+			this.inicial = ''
 			this.estados.clear()
 			this.finais.clear()
 
-			this.curr = null
+			this.curr = ''
 			this.stateTable.clear()
 
 			return true
@@ -81,7 +81,7 @@ class Automato {
 			for(let token of this.tokens){
 				if(moves.has(token) && moves.get(token) == estado1){
 					if(estado2 == null){
-						moves.remove(token)
+						moves.delete(token)
 					}
 					else{
 						moves.set(token, estado2)
@@ -92,12 +92,13 @@ class Automato {
 	}
 	toString(){
 		let tabela = ''
-		this.stateTable.forEach((val,q0) => this.stateTable.get(q0).forEach((q1,char) => {tabela = tabela + '(' + q0 + ',' + char + ',' + q1 + ')\n'}))
+		this.stateTable.forEach((val,q0) => this.stateTable.get(q0).forEach((q1,char) => tabela += '(' + q0 + ',' + char + ',' + q1 + ')\n'))
 		return `${this.name}
 S: ${new Array(...this.estados).join(',')}
 A: ${new Array(...this.tokens).join(',')}
 i: ${this.inicial}
 f: ${new Array(...this.finais).join(',')}
+
 ${tabela}`
 	}
 }
@@ -114,10 +115,13 @@ function addPalavra(pal,where){
 	li.appendChild(document.createTextNode(pal))
 	document.getElementsByClassName(where)[0].appendChild(li)
 }
+
+
 function clearPalavras(){
 	document.getElementsByClassName("aceitas")[0].innerHTML = ''
 	document.getElementsByClassName("rejeitas")[0].innerHTML = ''
 }
+
 
 function testePalavras(){
 	let auto = window.automato

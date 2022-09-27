@@ -8,6 +8,7 @@
 	<style>
 		.wrap{
 			display: flex;
+			margin-bottom: 1%;
 		}
 		.wrap > div{
 			display: grid;
@@ -30,11 +31,11 @@
 			font-weight: bold;
 		}
 		.aceitas li{
-			color: green;
+			color: rgb(84, 194, 84);
 			font-weight: bold;
 		}
 		.rejeitas li{
-			color: red;
+			color: rgb(253, 82, 82);
 			font-weight: bold;
 		}
 	</style>
@@ -43,9 +44,27 @@
 	<h1>Interface do Autômato</h1>
 	<p>Explicação</p>
 	<ul>
-		<li>
-			passo
-		</li>
+		<li><strong>Método de Utilização:</strong><ol>
+			<li>
+				Coloque a definição do AFD  na caixa <strong>Autômato</strong>.
+			</li>
+			<li>
+				Pressione o botão <strong>Processar</strong>.
+			</li>
+			<li>
+				Coloque a(s) palavra(s) desejada(s) na caixa <strong>Palavras de Entrada</strong>.
+			</li>
+			<li>
+				Pressione o botão <strong>Reconhecer</strong>.
+			</li>
+		</ol></li>
+		<li><strong>Observações:</strong><ol>
+			<li>Autômatos devem seguir as <strong>especificações do enunciado</strong>.</li>
+			<li>Após o passo 2, <strong>Estatus do Autômato</strong> deve ficar: <strong style="color:rgb(84, 194, 84)">Inicializado</strong>.
+			<li>Após o passo 2, a caixa <strong>Autômato</strong> conterá a <strong>versão mínima</strong> do autômato de entrada.</li>
+			<li>Palavras devem ser separadas por <strong>quebra de linha</strong>.</li>
+			<li>Palavras serão divididas entre <strong style="color:rgb(84, 194, 84)">ACEITAS</strong> e <strong style="color:rgb(253, 82, 82)">REJEITAS</strong>.</li>
+		</ol></li>
 	</ul>
 	<div class="wrap">
 		<div>
